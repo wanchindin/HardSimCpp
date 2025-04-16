@@ -15,16 +15,15 @@ public:
     MyVector();
     ~MyVector();
 
-    
+    void push_back(const T& value);
+    void pop_back();
+    size_t getSize() const;
+    size_t getCapacity() const;
+    T& operator[](size_t index);    // Access element at index
+
+    void resize();
 };
 
-MyVector::MyVector(/* args */)
-{
-}
-
-MyVector::~MyVector()
-{
-}
-
-
+#include "MyVector.tpp"
+// Implementation of MyVector methods
 #endif
