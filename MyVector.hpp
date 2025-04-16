@@ -20,8 +20,12 @@ public:
     size_t getSize() const;
     size_t getCapacity() const;
     T& operator[](size_t index);    // Access element at index
-
     void resize();
+    void clear();
+
+    // Deep copy
+    MyVector(const MyVector<T>& other); // Copy constructor
+    MyVector& operator=(const MyVector<T>& other);  // Copy assignment
 };
 
 #include "MyVector.tpp"

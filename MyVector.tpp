@@ -2,17 +2,15 @@
 #include "MyVector.hpp"
 using namespace std;
 template<typename T>
-MyVector<T>::MyVector() : size(0), capacity(10)
+MyVector<T>::MyVector() : size(0), capacity(10)     //Constructor
 {
     data = new T[capacity];
-    cout<<"Constructor"<<endl;
 }
 
 template<typename T>
-MyVector<T>::~MyVector()
+MyVector<T>::~MyVector()    //Destructor
 {
     delete[] data;
-    cout<<"Destructor"<<endl;
 }
 
 template <typename T>
@@ -68,4 +66,39 @@ void MyVector<T>::resize()
     delete[] data;
     data = newData;
     cout<<"Resizing to capacity: "<<capacity<<endl;
+}
+
+template <typename T>
+void MyVector<T>::clear()
+{
+    delete[] data;
+    data = new T[capacity];
+    size = 0;
+    cout<<"Cleared vector"<<endl;
+}
+
+template <typename T>
+MyVector<T>::MyVector(const MyVector<T>& other): size(other.size), capacity(other.capacity)
+{
+    data = new T[capacity];
+    for (size_t i = 0; i < size; ++i) {
+        data[i] = other.data[i]; 
+    }
+    std::cout << "Copy Constructor Called" << std::endl;
+}
+
+template <typename T>
+MyVector<T>& MyVector<T>::operator=(const MyVector<T>& other)
+{
+    if (this != &other) {
+        delete[] data; // Free existing resource
+        size = other.size;
+        capacity = other.capacity;
+        data = new T[capacity];
+        for (size_t i = 0; i < size; ++i) {
+            data[i] = other.data[i]; 
+        }
+    }
+    std::cout << "Copy Assignment Operator Called" << std::endl;
+    return *this;
 }
