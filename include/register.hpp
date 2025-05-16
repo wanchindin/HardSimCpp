@@ -1,23 +1,23 @@
 #pragma once
 #include "component.hpp"
+#include "wire.hpp"
 #include <iostream>
 
 // Template class Register simulates a hardware register.
-// It stores a current value (`value`) and a next value (`nextValue`),
-// which gets updated during the `simulate()` function.
+// It uses Wire<T> to store the current value and the next value.
 
 template <typename T>
 class Register : public Component{
     private:
-        T value;
-        T nextValue;
+        Wire<T> value;
+        Wire<T> nextValue;
     public:
         Register() : value(), nextValue() {}
-        void setNext(T v){ nextValue = v; }
-        T get() const { return value; }
+        void setNext(T v){ nextValue.set(v); }
+        T get() const { return value.get(); }
         void simulate() override { 
-            value = nextValue; 
-            std::cout<<"[Register] value = " << value <<std::endl;
+            value.set(nextValue.get()); 
+            std::cout<<"[Register] value = " << value.get() <<std::endl;
         }
         std::string name() const override {
             return "Register";
