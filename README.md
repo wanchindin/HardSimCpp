@@ -5,43 +5,22 @@
 
 ## Features
 - **Abstract Base Class (`Component`)**:  
-  A generic interface for all hardware components, ensuring consistency and extensibility.
-- **Register Simulation (`Register`)**:  
-  A template-based class for simulating hardware registers with support for value updates and clock cycles.
-- **Extensibility**:  
-  Designed to easily integrate new components like ALUs, multiplexers, and wires.
+  A generic interface for all hardware components, ensuring consistency and extensibility. All components must implement the `simulate()` and `name()` methods.
+  
+- **Wire Simulation (`Wire`)**:  
+  A template-based class for simulating signal wires, supporting value propagation and updates.
 
-## Project Structure
-📁 HardSimCpp/
-├── CMakeLists.txt
-├── main.cpp
-├── include/
-│   ├── component.h
-│   ├── register.h
-│   ├── alu.h
-│   ├── mux.h
-│   ├── wire.h
-│   ├── driver.h
-│   ├── monitor.h
-│   ├── scoreboard.h
-│   ├── env.h
-│   ├── test.h
-│   ├── netlist_parser.h
-│   ├── graph.h
-│   └── timing_analyzer.h
-├── src/
-│   ├── register.cpp
-│   ├── alu.cpp
-│   ├── mux.cpp
-│   ├── wire.cpp
-│   ├── driver.cpp
-│   ├── monitor.cpp
-│   ├── scoreboard.cpp
-│   ├── env.cpp
-│   ├── test.cpp
-│   ├── netlist_parser.cpp
-│   ├── graph.cpp
-│   └── timing_analyzer.cpp
-├── test/
-│   ├── sample_test.json
-│   └── waveform_output.log
+- **Register Simulation (`Register`)**:  
+  A template-based class for simulating hardware registers, with support for storing current and next values, and simulating clock cycle updates.
+
+- **Arithmetic Logic Unit (`ALU`)**:  
+  A flexible and extensible ALU implementation that supports various operations such as addition, subtraction, bitwise operations, and comparisons. The ALU uses an `ALUOp` enum to specify operations and integrates seamlessly with `Wire` for input and output.
+
+- **Extensibility**:  
+  Designed to easily integrate new components like multiplexers, decoders, and custom hardware modules.
+
+## Current Progress
+- Implemented the **`Component`** base class to provide a unified interface for all hardware components.
+- Developed **`Wire`** for simulating signal propagation between components.
+- Added **`Register`** for simulating hardware registers with support for value updates and clock cycles.
+- Completed **`ALU`** with support for operations such as ADD, SUB, AND, OR, XOR, comparisons (CMP_EQ, CMP_LT), and pass-through (PASS_A). Includes handling of unknown operations with a default behavior.
