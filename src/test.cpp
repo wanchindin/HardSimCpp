@@ -15,7 +15,9 @@ void test_wire(){
 
 void test_register(){
     std::cout<<"===================Register====================="<<std::endl;
-    Register<int> *reg = new Register<int>();
+    Wire<int>* value = new Wire<int>;
+    Wire<int>* nextValue = new Wire<int>;
+    Register<int> *reg = new Register<int>(value, nextValue);
     std::cout<<"Initial value:"<<reg->get()<<std::endl;
     
     reg->setNext(1);
