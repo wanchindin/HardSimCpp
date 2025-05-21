@@ -7,7 +7,7 @@
 template <typename T>
 class Alu : public Component{
     private:
-        Wire<T>* lhs, rhs;
+        Wire<T>* lhs, *rhs;
         Wire<T>* output;
         ALUOp op;
     public:
@@ -39,7 +39,7 @@ class Alu : public Component{
                 output->set(result);
                 std::cout<< "[ALU] result = "<<result<<std::endl;
             }
-            string name() const override{
+            std::string name() const override{
                 return "ALU";
             }
 };
