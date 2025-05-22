@@ -5,6 +5,7 @@
 #include "../include/alu.hpp"
 #include "../include/mux.hpp"
 
+/*
 void test_wire(){
     std::cout<<"===================Wire====================="<<std::endl;
     Wire<int> *wire = new Wire<int>();
@@ -128,13 +129,52 @@ void test_reg2alu2reg(){
     reg2.simulate();
     std::cout<< "Register 2 Output: "<< reg2Value.get() << " (Expected:10) "<< std::endl;
 }
+*/
 
+void simulate_circuit(){
+    // Create share_ptr for wires
+    auto reg1_value = std::make_shared<Wire<int>>();
+    auto reg1_nextValue = std::make_shared<Wire<int>>();
+    auto reg2_value = std::make_shared<Wire<int>>();
+    auto reg2_nextValue = std::make_shared<Wire<int>>();
+    auto alu_output = std::make_shared<Wire<int>>();
+    auto mux_sel = std::make_shared<Wire<bool>>();
+    auto mux_output = std::make_shared<Wire<int>>();
+
+    // Create components using unique_ptr
+    std::vector<std::unique_ptr<Component>> components;
+    // push_back接受右值所以不用寫std::move把指標移動進vector
+    components.push_back(std::make_unique<Register<int>>(reg1_value, reg1_nextValue)); 
+    components.push_back(std::make_unique<Register<int>>(reg2_value, reg2_nextValue));
+    components.push_back(std::make_unique<Alu<int>>(reg1_value, reg2_value, alu_output, ALUOp::ADD));
+    components.push_back(std::make_unique<Mux<int>>(reg1_value, alu_output, mux_sel, mux_output));
+
+
+    // Initialize register values
+    reg1_nextValue->set(5);
+    reg2_nextValue->set(3);
+
+ 
+    // Simulate time steps
+    for(int time=0; time<5; time++){
+        std::cout << "=================== Time: " << time << " ===================" << std::endl;
+        mux_sel->set(time % 2 == 0); // select register1 or alu
+
+        for(auto& component : components){
+            component->simulate();
+        }
+        reg1_nextValue->set(mux_output->get());
+        reg2_nextValue->set(alu_output->get());
+
+        // Output the current state
+        std::cout << "Register 1 Output: " << reg1_value->get() << std::endl;
+        std::cout << "Register 2 Output: " << reg2_value->get() << std::endl;
+        std::cout << "ALU Output: " << alu_output->get() << std::endl;
+        std::cout << "MUX Output: " << mux_output->get() << std::endl;
+    }
+}
 
 int main(){
-    test_wire();
-    test_register();
-    test_alu();
-    test_reg2alu2reg();
-    test_mux();
+    simulate_circuit();
     return 0;
 }

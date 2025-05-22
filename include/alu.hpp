@@ -3,15 +3,17 @@
 #include "component.hpp"
 #include "control.hpp"
 #include <iostream>
+#include <memory>   
 
 template <typename T>
 class Alu : public Component{
     private:
-        Wire<T>* lhs, *rhs;
-        Wire<T>* output;
+        std::shared_ptr<Wire<T>> lhs;
+        std::shared_ptr<Wire<T>> rhs;
+        std::shared_ptr<Wire<T>> output;
         ALUOp op;
     public:
-        Alu(Wire<T>* lhs, Wire<T>* rhs, Wire<T>* output, ALUOp op)
+        Alu(std::shared_ptr<Wire<T>> lhs, std::shared_ptr<Wire<T>> rhs, std::shared_ptr<Wire<T>> output, ALUOp op)
             : lhs(lhs), rhs(rhs), output(output), op(op) {};
         
             void setOp(ALUOp newop){

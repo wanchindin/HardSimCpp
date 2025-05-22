@@ -2,6 +2,7 @@
 #include "component.hpp"
 #include "wire.hpp"
 #include <iostream>
+#include <memory>
 
 // Template class Register simulates a hardware register.
 // It uses Wire<T> to store the current value and the next value.
@@ -9,11 +10,11 @@
 template <typename T>
 class Register : public Component {
 private:
-    Wire<T>* value;
-    Wire<T>* nextValue;
+    std::shared_ptr<Wire<T>> value;
+    std::shared_ptr<Wire<T>> nextValue;
 
 public:
-    Register(Wire<T>* value, Wire<T>* nextValue)
+    Register(std::shared_ptr<Wire<T>> value, std::shared_ptr<Wire<T>> nextValue)
         : value(value), nextValue(nextValue) {}
 
     void setNext(T v) { nextValue->set(v); }
