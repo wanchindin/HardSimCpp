@@ -4,6 +4,8 @@
 #include "../include/register.hpp"
 #include "../include/alu.hpp"
 #include "../include/mux.hpp"
+#include "../include/driver.hpp"
+#include "../include/monitor.hpp"
 
 /*
 void test_wire(){
@@ -149,20 +151,27 @@ void simulate_circuit(){
     components.push_back(std::make_unique<Alu<int>>(reg1_value, reg2_value, alu_output, ALUOp::ADD));
     components.push_back(std::make_unique<Mux<int>>(reg1_value, alu_output, mux_sel, mux_output));
 
+    // Create Driver and Monitor
+    auto reg1_driver = std::make_unique<Driver<int>>(reg1_nextValue, std::vector<int>{5, 10, 15, 20, 25});
+    auto reg2_driver = std::make_unique<Driver<int>>(reg2_nextValue, std::vector<int>{3, 6, 9, 12, 15});
+    auto alu_monitor = std::make_unique<Monitor<int>>(alu_output);
 
-    // Initialize register values
-    reg1_nextValue->set(5);
-    reg2_nextValue->set(3);
-
- 
     // Simulate time steps
     for(int time=0; time<5; time++){
         std::cout << "=================== Time: " << time << " ===================" << std::endl;
+        
+        // Drive inputs
+        reg1_driver->drive();
+        reg2_driver->drive();
         mux_sel->set(time % 2 == 0); // select register1 or alu
 
         for(auto& component : components){
             component->simulate();
         }
+
+        // Observe outputs
+        alu_monitor->observe();
+
         reg1_nextValue->set(mux_output->get());
         reg2_nextValue->set(alu_output->get());
 
@@ -172,6 +181,13 @@ void simulate_circuit(){
         std::cout << "ALU Output: " << alu_output->get() << std::endl;
         std::cout << "MUX Output: " << mux_output->get() << std::endl;
     }
+
+    // Print observed values
+    std::cout << "=================== Observed ALU Outputs ===================" << std::endl;
+    for (const auto& value : alu_monitor->getObservedValues()) {
+        std::cout << value << " ";
+    }
+    std::cout << std::endl;
 }
 
 int main(){
