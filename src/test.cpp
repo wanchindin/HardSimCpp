@@ -6,6 +6,7 @@
 #include "../include/mux.hpp"
 #include "../include/driver.hpp"
 #include "../include/monitor.hpp"
+#include "../include/scoreboard.hpp"
 
 /*
 void test_wire(){
@@ -156,6 +157,9 @@ void simulate_circuit(){
     auto reg2_driver = std::make_unique<Driver<int>>(reg2_nextValue, std::vector<int>{3, 6, 9, 12, 15});
     auto alu_monitor = std::make_unique<Monitor<int>>(alu_output);
 
+    // Create Scoreboard with expected ALU outputs
+    auto alu_scoreboard = std::make_unique<Scoreboard<int>>(std::vector<int>{8, 16, 24, 32, 40});
+
     // Simulate time steps
     for(int time=0; time<5; time++){
         std::cout << "=================== Time: " << time << " ===================" << std::endl;
@@ -172,6 +176,9 @@ void simulate_circuit(){
         // Observe outputs
         alu_monitor->observe();
 
+        // Record ALU output in Scoreboard
+        alu_scoreboard->record(alu_output->get());
+
         reg1_nextValue->set(mux_output->get());
         reg2_nextValue->set(alu_output->get());
 
@@ -182,12 +189,7 @@ void simulate_circuit(){
         std::cout << "MUX Output: " << mux_output->get() << std::endl;
     }
 
-    // Print observed values
-    std::cout << "=================== Observed ALU Outputs ===================" << std::endl;
-    for (const auto& value : alu_monitor->getObservedValues()) {
-        std::cout << value << " ";
-    }
-    std::cout << std::endl;
+    alu_scoreboard->compare();
 }
 
 int main(){
