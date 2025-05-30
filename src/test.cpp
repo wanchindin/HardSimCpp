@@ -7,6 +7,8 @@
 #include "../include/driver.hpp"
 #include "../include/monitor.hpp"
 #include "../include/scoreboard.hpp"
+#include "../include/env.hpp"
+#include "../include/transaction.hpp"
 
 /*
 void test_wire(){
@@ -132,7 +134,7 @@ void test_reg2alu2reg(){
     reg2.simulate();
     std::cout<< "Register 2 Output: "<< reg2Value.get() << " (Expected:10) "<< std::endl;
 }
-*/
+
 
 void simulate_circuit(){
     // Create share_ptr for wires
@@ -192,7 +194,19 @@ void simulate_circuit(){
     alu_scoreboard->compare();
 }
 
+*/
+
 int main(){
-    simulate_circuit();
+    // test
+    std::vector<ALUTransaction> transactions = {
+        {ALUOp::ADD, 5, 3, 8},
+        {ALUOp::SUB, 10, 6, 4},
+        {ALUOp::AND, 15, 9, 9},
+        {ALUOp::OR, 20, 12, 28},
+        {ALUOp::XOR, 25, 15, 22}
+    };
+
+    Env env(transactions);
+    env.run(transactions.size());
     return 0;
 }
