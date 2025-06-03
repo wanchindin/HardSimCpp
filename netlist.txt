@@ -1,0 +1,4 @@
+gate_name input1 input2 output delay
+AND A B C 2
+OR C D E 3
+XOR E F G 1
